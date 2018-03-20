@@ -9,7 +9,6 @@ digits = datasets.load_digits()
 print(iris.data)
 print("-----------")
 
-
 '''in digits it is an array of images, to access each image we can use .images[x]'''
 print(digits.images[1])
 

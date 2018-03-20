@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn import datasets
 from sklearn import metrics
 from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import cross_val_score
 
 
 #peersim = np.loadtxt("peersim.csv", delimiter=",", skiprows=1)
@@ -60,3 +61,4 @@ print(metrics.classification_report(expected, predicted))
 
 # Printing the confusion matrix
 print(metrics.confusion_matrix(expected, predicted))
+
