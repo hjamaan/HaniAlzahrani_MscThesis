@@ -5,17 +5,18 @@ import numpy as np
 import pandas as pd
 
 
-def loadDataSet(file):
+def load_dataset(csvfile):
     # comma delimited is the default
-    input_file = file
+    input_file = csvfile
     df = pd.read_csv(input_file, header = 0)
     original_headers = list(df.columns.values)
     df = df._get_numeric_data()
     numeric_headers = list(df.columns.values)
     numpy_array = df.as_matrix()
-    fileData = numpy_array[:, [0, 1,2,3,4,5,6]]
-    fileTarget = numpy_array[:, [7]]
-    print(fileData)
-    print(fileTarget)
+    print
+    indexOfArray = numpy_array.shape[1]
 
-loadDataSet("peersim.csv")
+    fileData = numpy_array[:, 0:indexOfArray-2]
+    fileTarget = numpy_array[:, indexOfArray-1]
+    return fileData, fileTarget
+
