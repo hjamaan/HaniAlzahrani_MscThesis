@@ -9,6 +9,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import KFold, cross_val_score
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
 
 
 # Naive Bayes
@@ -68,6 +69,24 @@ def knn(data,target):
 def cart(data,target):
     # fit a logistic regression model to the data
     model = DecisionTreeClassifier()
+    model.fit(data, target.ravel())
+    # Print model info
+    print("********************")
+    print(model)
+    # Predictions
+    expected = target
+    predicted = model.predict(data)
+    # Printing the results from metrics
+    print(metrics.classification_report(expected, predicted))
+    # Printing the confusion matrix
+    print(metrics.confusion_matrix(expected, predicted))
+    print("********************")
+
+
+# SVM for Classification - SVC
+def svcm(data,target):
+    # fit a logistic regression model to the data
+    model = SVC()
     model.fit(data, target.ravel())
     # Print model info
     print("********************")
