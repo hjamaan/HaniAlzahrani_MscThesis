@@ -34,6 +34,7 @@ def naive_bayes(data,target):
     kfold = model_selection.KFold(n_splits=10)
     results = model_selection.cross_val_score(model, data, target, cv=kfold)
     print("Accuracy: %.3f%% (%.3f%%)" % (results.mean()*100.0, results.std()*100.0))
+
     
 
 # Logistic Regression
