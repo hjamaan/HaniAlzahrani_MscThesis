@@ -1,7 +1,8 @@
 # This module will compare models results
 import pandas
+import numpy as np
 import matplotlib.pyplot as plt
-from sklearn import model_selection, cross_validation
+from sklearn import model_selection
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -30,44 +31,42 @@ models.append(('SVM', SVC()))
 
 # evaluate each model in turn
 names = []
+
 accuracyresults = []
-f1results = []
-precisionresults = []
-recallresults = []
+accuracy = []
+
+aucresults = []
+auc = []
+
+f1 = []
+precision = []
+recall = []
+
+# Specify the N fold
+N = 10
 
 for name, model in models:
 	names.append(name)
-	cv_accuracy = model_selection.cross_val_score(model,  X_input, Y_output, cv=10, scoring='accuracy')
+	cv_accuracy = model_selection.cross_val_score(model,  X_input, Y_output, cv=N, scoring='accuracy')
+	cv_auc = model_selection.cross_val_score(model,  X_input, Y_output, cv=N, scoring='roc_auc')
 	accuracyresults.append(cv_accuracy)
+	aucresults.append(cv_auc)
 	msg = "%s: %f (%f)" % (name, cv_accuracy.mean(), cv_accuracy.std())
+	accuracy.append(cv_accuracy.mean())
+	auc.append(cv_auc.mean())
 	print('----------------------------------------')
-	print('', msg)
-	y_pred = cross_val_predict(model,X_input,Y_output,cv=10)
-	print('y pred',y_pred)
-	conf_mat = confusion_matrix(Y_output,y_pred)
+	print(msg)
+	Y_pred = cross_val_predict(model,X_input,Y_output,cv=N)
+	conf_mat = confusion_matrix(Y_output,Y_pred)
 	print(conf_mat)
-	f = open('result.txt','a+')
-	f.write(str(name))
-	f.write(str(cv_accuracy.mean()))
-	f.close()
 	print('----------------------------------------')
 
-'''for name, model in models:
-        model.fit(X_input, Y_output)
-        predictions = model.predict(X_validation)
-        print(model)
-        print(accuracy_score(Y_validation, predictions))
-        print(confusion_matrix(Y_validation, predictions))
-        print(classification_report(Y_validation, predictions))
-        print('----------------------------------------')'''
-kf = cross_validation.KFold(len(Y_output), n_folds=5)
-for train_index, test_index in kf:
-        X_train, X_test = X_input[train_index], X_input[test_index]
-        y_train, y_test = Y_output[train_index], Y_output[test_index]
-        model.fit(X_train, y_train)
-        matrix = confusion_matrix(y_test, model.predict(X_test))
-        print(metrics.classification_report(y_test, model.predict(X_test)))
-        print(matrix)
+
+
+print('----------------------------------------')
+print(names)
+print(accuracy)
+print(auc)
 
 
 # boxplot for accuracy comparison
@@ -76,5 +75,15 @@ graph.suptitle('Accuracy Comparison')
 ax = graph.add_subplot(111)
 plt.boxplot(accuracyresults)
 ax.set_xticklabels(names)
+
+y_pos = np.arange(len(accuracy))
+
+graph2 = plt.figure()
+graph2.suptitle('Accuracy Comparison')
+ax2 = graph2.add_subplot(111)
+plt.bar(y_pos, accuracy, align='center', alpha=0.5)
+plt.xticks(y_pos, names)
 plt.show()
+
+
 
