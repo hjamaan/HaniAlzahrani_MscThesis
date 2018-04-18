@@ -38,7 +38,9 @@ accuracy = []
 aucresults = []
 auc = []
 
+f1results = []
 f1 = []
+
 precision = []
 recall = []
 
@@ -63,10 +65,16 @@ for name, model in models:
 
 
 
-print('----------------------------------------')
-print(names)
-print(accuracy)
-print(auc)
+#Writing to csv
+file=open('./result.csv', 'w+')
+file.write(' ,')
+file.write(str(names))
+file.write('\nAccuracy,')
+file.write(str(accuracy))
+file.write('\nAuc,')
+file.write(str(auc))
+file.close()
+
 
 
 # boxplot for accuracy comparison
@@ -78,6 +86,7 @@ ax.set_xticklabels(names)
 
 y_pos = np.arange(len(accuracy))
 
+# bar chart accuracy comparison
 graph2 = plt.figure()
 graph2.suptitle('Accuracy Comparison')
 ax2 = graph2.add_subplot(111)
